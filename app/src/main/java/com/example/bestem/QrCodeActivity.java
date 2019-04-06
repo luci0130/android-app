@@ -64,15 +64,6 @@ public class QrCodeActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .build();
 
-        buttonScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cameraView.start();
-                cameraView.captureImage();
-            }
-        });
-
-
         cameraView.addCameraKitListener(new CameraKitEventListener() {
             @Override
             public void onEvent(CameraKitEvent cameraKitEvent) {
@@ -100,6 +91,13 @@ public class QrCodeActivity extends AppCompatActivity {
             }
         });
 
+        buttonScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cameraView.start();
+                cameraView.captureImage();
+            }
+        });
     }
 
     private void runDetectorBitmap(Bitmap bitmap)
