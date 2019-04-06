@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "132458303522",
+    "firebase_url": "https://bestem-evacuation.firebaseio.com",
+    "project_id": "bestem-evacuation",
+    "storage_bucket": "bestem-evacuation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132458303522:android:efbe294e9e84ed92",
+        "android_client_info": {
+          "package_name": "com.example.bestem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132458303522-oodnq6se5dfvaolhbfc0k6or6lo263qb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bestem",
+            "certificate_hash": "3a4c108d6e83ff60447004c8455f5ae458dddc68"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD11qvST2UjsGOWZ56hb9u4xLVkQ_WQDv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132458303522-1bf98ssjg5qgbdl5ej6fl28k6mp3e88k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
