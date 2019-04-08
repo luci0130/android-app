@@ -13,8 +13,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -36,6 +44,8 @@ public class QrCodeActivity extends AppCompatActivity {
     CameraView cameraView;
     Button buttonScan;
     AlertDialog waitingDialog;
+    TextView textView;
+    RequestQueue requestQueue;
 
     @Override
     protected void onResume() {
@@ -56,8 +66,10 @@ public class QrCodeActivity extends AppCompatActivity {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        cameraView = (CameraView)findViewById(R.id.cameraview);
-        buttonScan = (Button)findViewById(R.id.btn_scan_qr);
+        cameraView = (CameraView) findViewById(R.id.cameraview);
+        buttonScan = (Button) findViewById(R.id.btn_scan_qr);
+        TextView textView = (TextView) findViewById(R.id.textView);
+        requestQueue = Volley.newRequestQueue(this);
         waitingDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setMessage("Please wait")
@@ -100,8 +112,7 @@ public class QrCodeActivity extends AppCompatActivity {
         });
     }
 
-    private void runDetectorBitmap(Bitmap bitmap)
-    {
+    private void runDetectorBitmap(Bitmap bitmap) {
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionBarcodeDetectorOptions options = new FirebaseVisionBarcodeDetectorOptions.Builder()
                 .setBarcodeFormats(
@@ -128,14 +139,13 @@ public class QrCodeActivity extends AppCompatActivity {
 
     }
 
-    private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes)
-    {
+    private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
         for (FirebaseVisionBarcode item : firebaseVisionBarcodes) {
 
             int value_type = item.getValueType();
             switch (value_type) {
-                case FirebaseVisionBarcode.TYPE_TEXT:
-                {
+
+                case FirebaseVisionBarcode.TYPE_TEXT: {
                     androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
                     builder.setMessage(item.getRawValue());
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -150,15 +160,28 @@ public class QrCodeActivity extends AppCompatActivity {
                 }
                 break;
 
-                case FirebaseVisionBarcode.TYPE_URL:
-                {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getRawValue()));
-                    startActivity(intent);
+                case FirebaseVisionBarcode.TYPE_URL: {
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, item.getRawValue(),
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    Intent intent = new Intent(getApplication(), MapActivity.class);
+                                    intent.putExtra("data", response.substring(0,500));
+                                    startActivity(intent);
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            textView.setText("That didn't work!");
+                        }
+                    });
+
+                    requestQueue.add(stringRequest);
                 }
                 break;
 
-                case FirebaseVisionBarcode.TYPE_CONTACT_INFO:
-                {
+                case FirebaseVisionBarcode.TYPE_CONTACT_INFO: {
                     String info = new StringBuilder("Name: ")
                             .append(item.getContactInfo().getName().getFormattedName())
                             .append("\n")

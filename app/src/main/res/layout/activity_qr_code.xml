@@ -15,7 +15,14 @@
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toTopOf="@+id/btn_scan_qr"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp"></com.wonderkiln.camerakit.CameraView>
+        tools:layout_editor_absoluteX="16dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="83dp"
+            android:text="@string/scan_2" />
+    </com.wonderkiln.camerakit.CameraView>
 
     <Button
         android:id="@+id/btn_scan_qr"
